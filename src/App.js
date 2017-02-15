@@ -2,22 +2,24 @@ import React, { Component } from 'react';
 import './App.css';
 import { getIdeas, getComments, getPeople } from './api.js'
 
-const Comment = ({ data }) => {
+const Comment = ({ comment }) => {
   return (
-    <li>
-      <span></span>
+    <li className="comment">
+      <h1>{comment.author || 'no one'}</h1>
+      <p>{comment.content}</p>
     </li>
   )
 }
 
-const Idea = ({ data }) => {
+const Idea = ({ idea }) => {
   return (
-    <li>
-      <span>{data.score || 0}</span>
-      <h1>{data.title}</h1>
-      <p>{data.description}</p>
-      <p>{data.creator.name}</p>
-      <p>{data.comments.map(comment => <Comment key={comment.id} data={comment} />)}</p>
+    <li className="idea">
+      <h1>
+        {idea.name} <span className="score">{idea.score || 0}</span>
+      </h1>
+      <h2>{`Suggested by ${idea.creator.name || 'no one'}`}</h2>
+      <p>{idea.description}</p>
+      <ul>{idea.comments.map(comment => <Comment key={comment.id} comment={comment} />)}</ul>
     </li>
   )
 }
@@ -56,7 +58,7 @@ class App extends Component {
 
   render() {
     return (
-      <ul>{this.state.ideas.map(idea => <Idea data={idea} />)}</ul>
+      <ul>{this.state.ideas.map(idea => <Idea idea={idea} />)}</ul>
     );
   }
 }

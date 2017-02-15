@@ -16,3 +16,25 @@
 .headerImage {
   width: 100%;
 }
+
+.score {
+  display: inline-block;
+  border-radius: 10%;
+  background-color: #66cc88;
+  padding: 0 4px;
+  margin: 4px 4px;
+}
+
+.idea {
+  display: block;
+  background-color: #eee;
+  width: 500px;
+  margin: 16px auto;
+  padding: 8px;
+}
+
+.comment {
+  display: block;
+  margin: 0 10px;
+  background-color: #ccc;
+}
