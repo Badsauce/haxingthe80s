@@ -1,5 +1,5 @@
 import Airtable from './airtable'
-import { lowerCaseProperties } from './utilities'
+import { lowerCaseProperties, removeProperties, upperCaseProperties } from './utilities'
 
 const ideasTable = Airtable('Ideas')
 const commentsTable = Airtable('Comments')
@@ -25,10 +25,52 @@ const select = (table, view) => {
         results.push(...records)
         fetchNextPage()
       }, (err) => {
-        if (err) { reject(err) }
-        resolve(transformRecords(results))
+        if (err) {
+          return reject(err)
+        }
+        return resolve(transformRecords(results))
       }
     )
+  })
+}
+
+const create = (table, data) => {
+  return new Promise((resolve, reject) => {
+    table.create(data, (err, record) => {
+      if (err) {
+        return reject(err)
+      }
+      return resolve(record)
+    })
+  })
+}
+
+const update = (table, data, blacklist) => {
+  return new Promise((resolve, reject) => {
+    const { id, ...updatedFields } = data
+    if (!id) { return reject('ID should be provided') }
+
+    const fieldsToSend = removeProperties(blacklist)(updatedFields)
+    table.update(id, upperCaseProperties(fieldsToSend), (err, record) => {
+      if (err) {
+        return reject(err)
+      }
+      return resolve(record)
+    })
+  })
+}
+
+const destroy = (table, data, blacklist) => {
+  return new Promise((resolve, reject) => {
+    const { id } = data
+    if (!id) { return reject('ID should be provided') }
+
+    table.destroy(data.id, (err, record) => {
+      if (err) {
+        return reject(err)
+      }
+      return resolve(record)
+    })
   })
 }
 
@@ -42,4 +84,49 @@ export const getComments = () => {
 
 export const getPeople = () => {
   return select(peopleTable, 'Main View')
+}
+
+export const createIdea = (data) => {
+  return create(ideasTable, data)
+}
+
+export const createComment = (data) => {
+  return create(commentsTable, data)
+}
+
+export const createPeople = (data) => {
+  return create(peopleTable, data)
+}
+
+export const updateIdea = (data) => {
+  return update(ideasTable, data, [
+    'comments',
+    'creator',
+  ])
+}
+
+export const updateComment = (data) => {
+  return update(commentsTable, data, [
+    'idea',
+    'creator',
+  ])
+}
+
+export const updatePeople = (data) => {
+  return update(peopleTable, data, [
+    'ideas',
+    'comments',
+  ])
+}
+
+export const destroyIdea = (data) => {
+  return destroy(ideasTable, data)
+}
+
+export const destroyComment = (data) => {
+  return destroy(commentsTable, data)
+}
+
+export const destroyPeople = (data) => {
+  return destroy(peopleTable, data)
 }
