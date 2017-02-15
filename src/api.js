@@ -130,3 +130,41 @@ export const destroyComment = (data) => {
 export const destroyPeople = (data) => {
   return destroy(peopleTable, data)
 }
+
+export const upvoteIdea = (data, person) => {
+  if (!data.id || !person.id) return Promise.reject('Missing ID on idea or person')
+  if (data.upvotes.includes(person.id)) return Promise.reject('Already upvoted')
+
+  if (data.downvotes.includes(person.id)) {
+    return updateIdea({
+      id: data,
+      downvotes: data.downvotes.filter(vote => vote === person.id),
+    })
+  }
+  return updateIdea({
+    id: data,
+    upvotes: [
+      ...data.upvotes,
+      person.id,
+    ],
+  })
+}
+
+export const downvoteIdea = (data, person) => {
+  if (!data.id || !person.id) return Promise.reject('Missing ID on idea or person')
+  if (data.downvotes.includes(person.id)) return Promise.reject('Already downvoted')
+
+  if (data.upvotes.includes(person.id)) {
+    return updateIdea({
+      id: data,
+      upvotes: data.upvotes.filter(vote => vote === person.id),
+    })
+  }
+  return updateIdea({
+    id: data,
+    downvotes: [
+      ...data.downvotes,
+      person.id,
+    ],
+  })
+}
