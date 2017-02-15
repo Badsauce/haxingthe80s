@@ -30,11 +30,40 @@
   background-color: #eee;
   width: 500px;
   margin: 16px auto;
+  padding-bottom: 8px;
+}
+
+.ideaTopBar {
+  display: flex;
+  justify-content: space-between;
+  background-color: #ccc;
   padding: 8px;
 }
 
+.ideaAuthor {
+  font-size: 11px;
+  color: #666;
+  padding-bottom: 8px;
+}
+
+.ideaContentArea {
+  padding: 8px;
+  padding-bottom: 16px;
+}
+
 .comment {
-  display: block;
+  display: flex;
   margin: 0 10px;
   background-color: #ccc;
+  padding: 8px;
+}
+
+.commentAuthor {
+  font-size: 12px;
+  padding-right: 8px;
+  border-right: solid 1px black;
+}
+
+.commentContent {
+  padding-left: 8px;
 }

@@ -5,8 +5,8 @@ import { getIdeas, getComments, getPeople } from './api.js'
 const Comment = ({ comment }) => {
   return (
     <li className="comment">
-      <h1>{comment.author || 'no one'}</h1>
-      <p>{comment.content}</p>
+      <h1 className="commentAuthor">{comment.author || 'no one'}</h1>
+      <p className="commentContent">{comment.content}</p>
     </li>
   )
 }
@@ -14,11 +14,19 @@ const Comment = ({ comment }) => {
 const Idea = ({ idea }) => {
   return (
     <li className="idea">
-      <h1>
-        {idea.name} <span className="score">{idea.score || 0}</span>
+      <h1 className="ideaTopBar">
+        <div>
+          {idea.name || 'No Title'} <span className="score">{idea.score || 0}</span>
+        </div>
+        <div>
+          <button>upvote</button><button>downvote</button>
+        </div>
+
       </h1>
-      <h2>{`Suggested by ${idea.creator.name || 'no one'}`}</h2>
-      <p>{idea.description}</p>
+      <div className="ideaContentArea">
+        <h2 className="ideaAuthor">{`Suggested by ${idea.creator.name || 'no one'}`}</h2>
+        <p>{idea.description}</p>
+      </div>
       <ul>{idea.comments.map(comment => <Comment key={comment.id} comment={comment} />)}</ul>
     </li>
   )
